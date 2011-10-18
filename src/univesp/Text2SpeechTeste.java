@@ -11,7 +11,9 @@ public class Text2SpeechTeste {
 		System.out.println("[FILE]: " + t2s.converter(texto));
 	}
 	
+	
 	public static void main(String[] params){
-		new Text2SpeechTeste().converter("Teste Bem sucedido!");
+		TextoFala app = new TextoFala();
+		System.out.println(app.converter("Sucesso"));
 	}
 }

@@ -16,14 +16,24 @@ public class TextoFala implements Text2Speech{
 	private String CTF_HOME = "";
 	
 	public TextoFala(){
+		
 		this.CTF_HOME = System.getProperty("user.dir") + System.getProperty("file.separator") + "ext";
 		if(Platform.isWindows()){
 			this.CTF_HOME += System.getProperty("file.separator") + "win_textofala";
+			System.out.println("$HOME="+CTF_HOME);
+			System.setProperty("jna.library.path", this.CTF_HOME);
+			this.CTFKernel = (ITextoFala) Native.loadLibrary("ctf.dll", ITextoFala.class);
 		}
-		System.setProperty("jna.library.path", this.CTF_HOME);
-		this.CTFKernel = (ITextoFala) Native.loadLibrary(ITextoFala.class);
+		else{
+			System.out.println("$HOME="+CTF_HOME);
+			System.setProperty("jna.library.path", this.CTF_HOME);
+			this.CTFKernel = (ITextoFala) Native.loadLibrary("cpqdtf", ITextoFala.class);
+		}
+		this.CTFKernel.tts_inicializa();
+		System.out.println("Biblioteca carregada de : " + this.CTF_HOME + ", versão: " + this.versao());
+		
 		this.canais = new HashMap<Long, String>();
-		this.criarCanais(1);
+		//this.criarCanais(1);
 	}
 	
 	@Override
