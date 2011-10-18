@@ -1,0 +1,29 @@
+# Arquivo de configuração para o Texto Fala
+
+default:
+	codificacaoAudio: 	#<codificação do áudio>
+	taxaAmostragem: 	#<taxa de amostragem>
+	numeroCanaisAudio: 	#<número de canais de áudio>
+	volume:				#<fator de volume>
+	ritmo:				#<fator de ritmo>
+	entonacao:			#<fator de entonação>
+	codificacaoTexto:	#<codificação do texto>
+	pausaInicial:		#<duração da pausa inicial>
+	pausaFinal:			#<duração da pausa final>
+	cabecalhoArquivo:	#<tipo de cabeçalho para síntese em arquivo>
+	cabecalhoMemoria	#<tipo de cabeçalho para síntese em memória>
+
+windows:
+	pathTTS: "diretório do texto fala"
+	pathDat: "Diretorio de dados"
+	pathReport: "Diretorio de logs"
+	
+	
+linux:
+	pathTTS: "diretório do texto fala"
+	pathDat: "Diretorio de dados"
+	pathReport: "Diretorio de logs"	
+	
+teste:
+	nome: "Nome do Software"
+	version: "Versão"
