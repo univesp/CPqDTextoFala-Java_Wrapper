@@ -1,7 +1,5 @@
 package univesp.text2speech.textofala;
 
-import univesp.text2speech.textofala.exceptions.*;
-
 import com.sun.jna.Library;
 import com.sun.jna.NativeLong;
 import com.sun.jna.ptr.PointerByReference;
@@ -34,7 +32,7 @@ public interface ITextoFala extends Library{
 	/**
 	 * Finaliza a biblioteca Texto-FalaÂ©, devendo ser chamada quando a aplicaÃ§Ã£o nÃ£o mais necessitar das funÃ§Ãµes da biblioteca.
 	 */
-	void tts_finaliza() throws TextoFalaFinalizeException;
+	void tts_finaliza();
 	
 	/**
 	 * Aloca um novo canal de conversÃ£o Texto-FalaÂ©.

@@ -1,12 +1,14 @@
 package univesp.text2speech.textofala;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 
 import univesp.text2speech.Text2Speech;
-import univesp.text2speech.textofala.exceptions.TextoFalaFinalizeException;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
@@ -16,7 +18,7 @@ import com.sun.jna.ptr.PointerByReference;
 
 public class TextoFala implements Text2Speech{
 	
-	private ITextoFala CTFKernel = null;
+	private ITextoFala textofala = null;
 	private Map<Long, String> canais = null;
 	private String CTF_HOME = "";
 	
@@ -27,47 +29,51 @@ public class TextoFala implements Text2Speech{
 			this.CTF_HOME += System.getProperty("file.separator") + "win_textofala";
 			System.out.println("$HOME="+CTF_HOME);
 			System.setProperty("jna.library.path", this.CTF_HOME);
-			this.CTFKernel = (ITextoFala) Native.loadLibrary("ctf.dll", ITextoFala.class);
+			this.textofala = (ITextoFala) Native.loadLibrary("ctf.dll", ITextoFala.class);
 		}
 		else{
 			System.out.println("$HOME="+CTF_HOME);
 			System.setProperty("jna.library.path", this.CTF_HOME);
-			this.CTFKernel = (ITextoFala) Native.loadLibrary("cpqdtf", ITextoFala.class);
+			this.textofala = (ITextoFala) Native.loadLibrary("cpqdtf", ITextoFala.class);
 		}
-		this.CTFKernel.tts_inicializa();
+		this.textofala.tts_inicializa();
 		System.out.println("Biblioteca carregada de : " + this.CTF_HOME + ", vers√£o: " + this.versao());
 		
 		this.canais = new HashMap<Long, String>();
-		//this.criarCanais(1);
+	}
+	
+	public void __init__(){
+		String EXT ; 
+		
 	}
 	
 	@Override
-	protected void finalize() throws TextoFalaFinalizeException, Throwable{
+	protected void finalize() throws  Throwable{
 		// TODO Auto-generated method stub
 		if(!this.canais.isEmpty()){ for(long canal : this.canais.keySet()){ this.cfreeChannel(canal); } }
-		if(this.CTFKernel != null){ this.CTFKernel.tts_finaliza(); }
+		if(this.textofala != null){ this.textofala.tts_finaliza(); }
 		super.finalize();
 	}
 			
 	private long callocChannel(){
-		if(this.CTFKernel == null){
+		if(this.textofala == null){
 			/// TODO: Add Exception
 		}
-		NativeLong canal = this.CTFKernel.tts_alocaCanal();
+		NativeLong canal = this.textofala.tts_alocaCanal();
 		if(canal.longValue() <= 0){
 			/// TODO: Add Exception
-			System.err.println(this.CTFKernel.tts_mensagemErro()+"\n");
+			System.err.println(this.textofala.tts_mensagemErro()+"\n");
 		}
 		System.out.println("[WARN]: alocado canal " + canal.longValue());
 		return canal.longValue();
 	}
 	
 	private void cfreeChannel(long canal){
-		this.CTFKernel.tts_desalocaCanal(canal);
+		this.textofala.tts_desalocaCanal(canal);
 	}
 	
 	public String versao(){
-		return this.CTFKernel.tts_versao();
+		return this.textofala.tts_versao();
 	}
 	
 	public Map<Long, String> criarCanais( int quantidade ){
@@ -89,7 +95,6 @@ public class TextoFala implements Text2Speech{
 		long ret = 0;
 		
 		for(byte x : b){
-			//System.out.println(":Byte => " + new Byte(x).longValue());
 			ret += new Byte(x).longValue();
 		}
 		
@@ -97,11 +102,11 @@ public class TextoFala implements Text2Speech{
 	}
 	public String configuracao(long ch) throws UnsupportedEncodingException{
 		if(ch < 0){
-			String s = "Erro no canal: " + this.CTFKernel.tts_mensagemErro();
+			String s = "Erro no canal: " + this.textofala.tts_mensagemErro();
 			System.out.println(s);
 			return  s;
 		}
-		System.out.println("Verificando a configuraÁ„o do canal " + ch);
+		System.out.println("Verificando a configuraÔøΩÔøΩo do canal " + ch);
 		NativeLong canal = new NativeLong(ch); // Canal a ser analizado
 		
 		byte[] codificacaoAudio = 			new byte[1];
@@ -116,7 +121,7 @@ public class TextoFala implements Text2Speech{
 		byte[] cabecalhoArquivo = 			new byte[1];
 		byte[] cabecalhoMemoria = 			new byte[1];
 		
-		NativeLong codigoConfiguracao = this.CTFKernel.tts_obtemConfiguracaoSintese(
+		NativeLong codigoConfiguracao = this.textofala.tts_obtemConfiguracaoSintese(
 			canal,
 			codificacaoAudio,
 			taxaAmostragem,
@@ -132,7 +137,7 @@ public class TextoFala implements Text2Speech{
 		);
 		
 		byte[] teste = {100, 0, 0};
-		String m = "var ConfiguraÁ„o_do_texto_fala: {";
+		String m = "var Configura√ß√£o_do_texto_fala: {";
 		m += "\n\tcanal : " + canal;
 		m += "\n\tcodificacao: " + byte2long(codificacaoAudio);
 		m += "\n\ttaxa:" + byte2long(taxaAmostragem);
@@ -154,54 +159,27 @@ public class TextoFala implements Text2Speech{
 	}
 	@SuppressWarnings({ "unused", "static-access" })
 	public String converter(String s) throws IOException, InterruptedException{
-		NativeLong canal = this.CTFKernel.tts_alocaCanal();
-		//ByteByReference file = new ByteByReference();
-		//byte[] buff = new byte[50];
-		//String[] buff = new String[50];
+		NativeLong canal = this.textofala.tts_alocaCanal();
 		PointerByReference buff = new PointerByReference();
-		//String buff = new String();
 		try {
 			this.configuracao(canal.longValue());
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.err.println(this.CTFKernel.tts_mensagemErro()+"\n");
+		System.err.println(this.textofala.tts_mensagemErro()+"\n");
 		NativeLong sinteze;
-		//sinteze = this.CTFKernel.tts_sintetizaTexto_mf(canal, s, buff);
-		sinteze = this.CTFKernel.tts_sintetizaTexto_mm(canal, s, buff);
+		sinteze = this.textofala.tts_sintetizaTexto_mm(canal, s, buff);
 		
-		//PointerByReference buff = new PointerByReference();
 		if(sinteze.intValue() < 0){
-			System.err.println(this.CTFKernel.tts_mensagemErro()+"\n");
+			System.err.println(this.textofala.tts_mensagemErro()+"\n");
 		}
 		Pointer ptr = buff.getValue();
-		
-		//Pointer ponteiro = buff.getPointer();
-		
-		//Pointer ponteiro_idx = buff.getValue();
-		//System.out.println("TYPE => " + Pointer.nativeValue(ponteiro));
-		//@SuppressWarnings("static-access")
-		//byte [] buffer = ponteiro.getByteArray(0, ponteiro.SIZE);
-		//System.out.println("FILE:");
-		//for(byte b : buffer){
-		//	System.out.println("\t"+new Byte(b).longValue());
-		//}
 		String fullfilename = System.getProperty("user.dir") + System.getProperty("file.separator") + "Sucesso.wav";
 		System.out.println("SALVANDO EM " + fullfilename);
 		File f = new File(fullfilename);
 		FileOutputStream out = new FileOutputStream(f);
 		BufferedOutputStream bout = new BufferedOutputStream(out);
-		/*
-		for(String x : buff){
-			if(x == null) {continue;}
-			
-			for(byte bite : x.getBytes("ASCII")){
-				System.out.println(x + " : " + bite);
-				bout.write(bite);
-			}
-		}
-		*/
 		
 		for(byte b : ptr.getByteArray(0, sinteze.intValue())){
 			bout.write(b);

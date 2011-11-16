@@ -16,7 +16,7 @@ public class Text2SpeechTeste {
 	public static void main(String[] params) throws IOException, InterruptedException{
 		TextoFala app = new TextoFala();
 		System.out.println(app.versao());
-		System.out.println(app.converter("Sucesso, isso È um teste mostrando que o software est· ok! \\pause{500} \\pitch{160} Nossa que legal! \\pitch{100} \\pause{50}"));
+		System.out.println(app.converter("Sucesso, isso √© um teste mostrando que o software est√© ok! \\pause{500} \\pitch{160} Nossa que legal! \\pitch{100} \\pause{50}"));
 		System.out.println("FIM");
 	}
 }

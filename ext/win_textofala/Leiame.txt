@@ -1,0 +1,47 @@
++-------------------------------------------------------------------------+
+  Fundação CPqD - Centro de Pesquisa e Desenvolvimento em Telecomunicações
+  Diretoria de Tecnologias de Serviços
+  Gerência de Serviços e Aplicações Multimídia
+
+  Rod. Campinas - Mogi-Mirim, Km 118,5
+  13086-902 - Campinas, SP - Brasil
+  
+  http://www.cpqd.com.br/
++-------------------------------------------------------------------------+
+
+------------------------- Engine CPqD Texto Fala --------------------------
+
+Este arquivo contém informações sobre a instalação da engine CPqD Texto 
+Fala (sistema de conversão texto-fala para o português do Brasil).
+
+A engine CPqD Texto Fala somente pode ser utilizada com a chave de hardware 
+conectada à porta paralela ou USB da máquina, dependendo da versão 
+disponibilizada.
+
+
+1) Requisitos do sistema
+------------------------
+
+Os requisitos mínimos de hardware e software para rodar a engine CPqD Texto 
+Fala são:
+
+. Microcomputador IBM-PC (ou compatível) com processador Pentium (ou 
+equivalente) com clock de 400 MHz
+. Windows XP ou Compatível
+. 256 MB de RAM
+. 1 GB de espaço em disco para instalação e operação do sistema
+. Placa de som padrão
+. Porta USB, ou paralela, para conexão da chave de hardware
+
+Observações:
+
+- Caso o aplicativo opere concomitantemente com outros programas, pode ser 
+necessária uma máquina de maior capacidade.
+- Para plataformas diferentes da mencionada e para sistemas com maior 
+restrição de memória ou espaço em disco, consultar o CPqD.
+
++-------------------------------------------------------------------------+
+
+
+--------------------------
+Fundação CPqD - 11/08/2010
