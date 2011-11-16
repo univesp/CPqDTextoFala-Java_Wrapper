@@ -1,11 +1,9 @@
 package univesp.text2speech.textofala;
 
 import java.io.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 import univesp.text2speech.Text2Speech;
 import univesp.text2speech.textofala.exceptions.TextoFalaFinalizeException;
@@ -13,6 +11,8 @@ import univesp.text2speech.textofala.exceptions.TextoFalaFinalizeException;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.PointerByReference;
 
 public class TextoFala implements Text2Speech{
 	
@@ -152,12 +152,13 @@ public class TextoFala implements Text2Speech{
 		return m;
 		
 	}
-	@SuppressWarnings("unused")
-	public String converter(String s) throws IOException{
+	@SuppressWarnings({ "unused", "static-access" })
+	public String converter(String s) throws IOException, InterruptedException{
 		NativeLong canal = this.CTFKernel.tts_alocaCanal();
 		//ByteByReference file = new ByteByReference();
 		//byte[] buff = new byte[50];
-		String[] buff = new String[50];
+		//String[] buff = new String[50];
+		PointerByReference buff = new PointerByReference();
 		//String buff = new String();
 		try {
 			this.configuracao(canal.longValue());
@@ -167,13 +168,15 @@ public class TextoFala implements Text2Speech{
 		}
 		System.err.println(this.CTFKernel.tts_mensagemErro()+"\n");
 		NativeLong sinteze;
-		sinteze = this.CTFKernel.tts_sintetizaTexto_mf(canal, s, buff);
-		//sinteze = this.CTFKernel.tts_sintetizaTexto_mm(canal, s, buff);
+		//sinteze = this.CTFKernel.tts_sintetizaTexto_mf(canal, s, buff);
+		sinteze = this.CTFKernel.tts_sintetizaTexto_mm(canal, s, buff);
 		
 		//PointerByReference buff = new PointerByReference();
 		if(sinteze.intValue() < 0){
 			System.err.println(this.CTFKernel.tts_mensagemErro()+"\n");
 		}
+		Pointer ptr = buff.getValue();
+		
 		//Pointer ponteiro = buff.getPointer();
 		
 		//Pointer ponteiro_idx = buff.getValue();
@@ -199,10 +202,14 @@ public class TextoFala implements Text2Speech{
 			}
 		}
 		*/
+		
+		for(byte b : ptr.getByteArray(0, sinteze.intValue())){
+			bout.write(b);
+		}
+		
 		bout.close();
-		System.out.println("convertendo com os seguintes parametros: --channel="+canal+" --text="+s+" --file="+buff);
+		System.out.println("\nconvertendo com os seguintes parametros: --channel="+canal+" --text="+s+" --file="+buff);
 			
-		//String f = buff;
 		System.out.println("Sinteze is " + sinteze.longValue() + ":file => " + buff);
 		return "";
 	}
