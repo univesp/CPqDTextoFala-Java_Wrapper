@@ -158,7 +158,7 @@ public class TextoFala implements Text2Speech{
 		
 	}
 	@SuppressWarnings({ "unused", "static-access" })
-	public String converter(String s) throws IOException, InterruptedException{
+	public String converter(String s, String name) throws IOException, InterruptedException{
 		NativeLong canal = this.textofala.tts_alocaCanal();
 		PointerByReference buff = new PointerByReference();
 		try {
@@ -175,7 +175,7 @@ public class TextoFala implements Text2Speech{
 			System.err.println(this.textofala.tts_mensagemErro()+"\n");
 		}
 		Pointer ptr = buff.getValue();
-		String fullfilename = System.getProperty("user.dir") + System.getProperty("file.separator") + "Sucesso.wav";
+		String fullfilename = System.getProperty("user.dir") + System.getProperty("file.separator") + name+".wav";
 		System.out.println("SALVANDO EM " + fullfilename);
 		File f = new File(fullfilename);
 		FileOutputStream out = new FileOutputStream(f);
