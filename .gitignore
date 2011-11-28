@@ -2,3 +2,4 @@ bin/**
 .project
 .plugin
 .classpath
+ext/win_textofala/**.*
