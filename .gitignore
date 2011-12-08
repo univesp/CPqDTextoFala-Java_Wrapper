@@ -2,4 +2,8 @@ bin/**
 .project
 .plugin
 .classpath
-ext/win_textofala/**.*
+ext/windows/*.dat
+ext/windows/*.dll
+ext/windows/*.lib
+ext/windows/*.exe
+ext/windows/*.ini
