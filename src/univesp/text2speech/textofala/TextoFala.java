@@ -26,12 +26,13 @@ public class TextoFala implements Text2Speech{
 		
 		this.CTF_HOME = System.getProperty("user.dir") + System.getProperty("file.separator") + "ext";
 		if(Platform.isWindows()){
-			this.CTF_HOME += System.getProperty("file.separator") + "win_textofala";
+			this.CTF_HOME += System.getProperty("file.separator") + "windows";
 			System.out.println("$HOME="+CTF_HOME);
 			System.setProperty("jna.library.path", this.CTF_HOME);
 			this.textofala = (ITextoFala) Native.loadLibrary("ctf.dll", ITextoFala.class);
 		}
 		else{
+			this.CTF_HOME += System.getProperty("file.separator") + "linux";
 			System.out.println("$HOME="+CTF_HOME);
 			System.setProperty("jna.library.path", this.CTF_HOME);
 			this.textofala = (ITextoFala) Native.loadLibrary("cpqdtf", ITextoFala.class);
@@ -41,12 +42,6 @@ public class TextoFala implements Text2Speech{
 		
 		this.canais = new HashMap<Long, String>();
 	}
-	
-	public void __init__(){
-		String EXT ; 
-		
-	}
-	
 	@Override
 	protected void finalize() throws  Throwable{
 		// TODO Auto-generated method stub
@@ -157,7 +152,6 @@ public class TextoFala implements Text2Speech{
 		return m;
 		
 	}
-	@SuppressWarnings({ "unused", "static-access" })
 	public String converter(String s, String name) throws IOException, InterruptedException{
 		NativeLong canal = this.textofala.tts_alocaCanal();
 		PointerByReference buff = new PointerByReference();
