@@ -27,7 +27,7 @@ public interface ITextoFala extends Library{
 	 * 
 	 * @return long
 	 */
-	long tts_inicializa();
+	NativeLong tts_inicializa();
 	
 	/**
 	 * Finaliza a biblioteca Texto-FalaÂ©, devendo ser chamada quando a aplicaÃ§Ã£o nÃ£o mais necessitar das funÃ§Ãµes da biblioteca.

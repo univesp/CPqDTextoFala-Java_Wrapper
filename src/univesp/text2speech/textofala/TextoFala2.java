@@ -39,7 +39,11 @@ public class TextoFala2 {
 	/// O Brâman
 	public TextoFala2(){
 		this.carregarBiblioteca();
-		core.tts_inicializa();
+		long init = core.tts_inicializa().longValue();
+		if(init < 0) {
+			log(ERROR, core.tts_mensagemErro());
+			System.exit((int) init);
+		}
 		this.canal = this.alocarCanal().longValue();
 	}
 	
